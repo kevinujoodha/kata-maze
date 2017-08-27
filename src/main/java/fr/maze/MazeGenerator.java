@@ -9,7 +9,6 @@ public class MazeGenerator {
     int rows = 7;
     int columns = 7;
     Cell[][] grid = new Cell[rows][columns];
-    Random r = new Random();
 
     //initialize the maze
     for (int row = 0; row < rows; row++) {
@@ -43,7 +42,7 @@ public class MazeGenerator {
 
         Cell neighborCell = null;
         if (neighbors.size() > 0) {
-          int randomIndex = r.ints(1, 0, neighbors.size()).findFirst().getAsInt();
+          int randomIndex = generateRandomIndex(neighbors);
           neighborCell = neighbors.get(randomIndex);
         }
 
@@ -89,6 +88,11 @@ public class MazeGenerator {
       sb.append(bottom).append("\n");
     }
     return sb;
+  }
+
+  protected int generateRandomIndex(List<Cell> neighbors) {
+    Random r = new Random();
+    return r.ints(1, 0, neighbors.size()).findFirst().getAsInt();
   }
 
   private static Cell getGridCell(int row, int column, Cell[][] grid, int rows, int columns) {
