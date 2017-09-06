@@ -80,6 +80,7 @@ public class MazeGenerator {
     return sb;
   }
 
+
   protected void initializeMaze() {
     //initialize the maze
     for (int row = 0; row < rows; row++) {
@@ -102,12 +103,13 @@ public class MazeGenerator {
   }
 
   private Cell getGridCell(int row, int column, Cell[][] grid) {
-    Cell resultCell = null;
-    if ((row >= 0 && row < this.rows) && (column >= 0 && (column < this.columns))) {
-      resultCell = grid[row][column];
-    }
-    return resultCell;
+    return isInGrid(row, column) ? grid[row][column] : null;
   }
+
+  private boolean isInGrid(int row, int column) {
+    return (row >= 0 && row < this.rows) && (column >= 0 && (column < this.columns));
+  }
+
 
   protected int generateRandomIndex(List<Cell> neighbors) {
     Random r = new Random();
