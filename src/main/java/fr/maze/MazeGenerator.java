@@ -89,15 +89,19 @@ public class MazeGenerator {
       }
     }
 
+    setGridCellsNeighbours();
+  }
+
+  private void setGridCellsNeighbours() {
     for (Cell[] gridRow : grid) {
       for (Cell cell : gridRow) {
-        int row = cell.getRow();
-        int column = cell.getColumn();
+        int currentCellRow = cell.getRow();
+        int currentCellColumn = cell.getColumn();
 
-        cell.setNorth(getGridCell(row - 1, column, grid));
-        cell.setSouth(getGridCell(row + 1, column, grid));
-        cell.setWest(getGridCell(row, column - 1, grid));
-        cell.setEast(getGridCell(row, column + 1, grid));
+        cell.setNorth(getGridCell(currentCellRow - 1, currentCellColumn, grid));
+        cell.setSouth(getGridCell(currentCellRow + 1, currentCellColumn, grid));
+        cell.setWest(getGridCell(currentCellRow, currentCellColumn - 1, grid));
+        cell.setEast(getGridCell(currentCellRow, currentCellColumn + 1, grid));
       }
     }
   }
