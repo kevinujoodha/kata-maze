@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MazeGenerator {
+public class MazeGeneratorLegacy {
   public StringBuffer generateMaze() {
     int rows = 7;
     int columns = 7;
@@ -71,12 +71,14 @@ public class MazeGenerator {
       for (Cell cell : row) {
         cell = (cell == null ? new Cell(-1, -1) : cell);
 
-        boolean islinked = (cell.getNeighbors().get(cell.getEast()) != null && cell.getNeighbors().get(cell.getEast()));
+        boolean islinked = (cell.getNeighbors().get(cell.getEast()) != null ?
+                cell.getNeighbors().get(cell.getEast()).booleanValue() : false);
 
         String eastBoundary = (islinked ? " " : "|");
         top.append("   ").append(eastBoundary);
 
-        islinked = (cell.getNeighbors().get(cell.getSouth()) != null && cell.getNeighbors().get(cell.getSouth()));
+        islinked = (cell.getNeighbors().get(cell.getSouth()) != null ?
+                cell.getNeighbors().get(cell.getSouth()).booleanValue() : false);
 
         String southBoundary = (islinked ? "   " : "---");
         bottom.append(southBoundary).append("+");
