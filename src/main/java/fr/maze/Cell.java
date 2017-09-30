@@ -6,7 +6,9 @@ public class Cell
 {
   private int row, column;
   private HashMap<Cell, Boolean> neighbors = new HashMap<Cell, Boolean>();
-  private Cell north, south, east, west;
+  private Cell north;
+  private Cell south;
+  private Cell east;
 
   public Cell(int row, int column) {
     this.row = row;
@@ -23,10 +25,6 @@ public class Cell
 
   public HashMap<Cell, Boolean> getNeighbors() {
     return neighbors;
-  }
-
-  public void setNeighbors(HashMap<Cell, Boolean> neighbors) {
-    this.neighbors = neighbors;
   }
 
   public Cell getNorth() {
@@ -51,13 +49,5 @@ public class Cell
 
   public void setEast(Cell east) {
     this.east = east;
-  }
-
-  public Cell getWest() {
-    return west;
-  }
-
-  public void setWest(Cell west) {
-    this.west = west;
   }
 }

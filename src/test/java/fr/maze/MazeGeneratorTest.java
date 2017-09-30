@@ -35,9 +35,10 @@ public class MazeGeneratorTest {
       return neighbors.size() - 1;
     }
   }
+
   private class TestableMazeGeneratorLegacy extends MazeGeneratorLegacy {
     @Override
-    protected int generateRandomIndex(List<Cell> neighbors) {
+    protected int generateRandomIndex(List<CellLegacy> neighbors) {
       return neighbors.size() - 1;
     }
   }

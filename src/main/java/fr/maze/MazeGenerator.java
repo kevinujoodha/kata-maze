@@ -7,34 +7,28 @@ import java.util.Random;
 public class MazeGenerator {
   private int rows;
   private int columns;
-  private RGrid rgrid;
 
   public StringBuffer generateMaze() {
     rows = 7;
     columns = 7;
-    rgrid = new RGrid();
+
 
     Cell[][] grid = new Cell[rows][columns];
 
     //initialize the maze
-    for (int row = 0; row < rows; row++) {
-      for (int column = 0; column < columns; column++) {
-        grid[row][column] = new Cell(row, column);
-
-        rgrid.addCell(new RCell(row, column));
-      }
-    }
-
-    // THIS IS USELESS
-    setCellsNeighbors(grid);
+    // TODO: To delete
+    initializeMaze(grid);
 
     //compute the maze : BinaryTree algorithm used here
     for (Cell[] gridRow : grid) {
       for (Cell cell : gridRow) {
         List<Cell> neighbors = new ArrayList<Cell>();
+
+
         if (cell.getNorth() != null) {
           neighbors.add(cell.getNorth());
         }
+
         if (cell.getEast() != null) {
           neighbors.add(cell.getEast());
         }
@@ -44,6 +38,7 @@ public class MazeGenerator {
           int randomIndex = generateRandomIndex(neighbors);
           neighborCell = neighbors.get(randomIndex);
         }
+
 
         if (neighborCell != null) {
           cell.getNeighbors().put(neighborCell, true);
@@ -87,31 +82,35 @@ public class MazeGenerator {
     return sb;
   }
 
-  protected void setCellsNeighbors(Cell[][] grid) {
+  private void initializeMaze(Cell[][] grid) {
+    for (int row = 0; row < rows; row++) {
+      for (int column = 0; column < columns; column++) {
+        grid[row][column] = new Cell(row, column);
+      }
+    }
+
     for (Cell[] gridRow : grid) {
       for (Cell cell : gridRow) {
         int row = cell.getRow();
         int column = cell.getColumn();
 
-        cell.setNorth(getGridCell(row - 1, column, grid, rows, columns));
-        cell.setSouth(getGridCell(row + 1, column, grid, rows, columns));
-        cell.setWest(getGridCell(row, column - 1, grid, rows, columns));
-        cell.setEast(getGridCell(row, column + 1, grid, rows, columns));
+        cell.setNorth(getGridCell(row - 1, column, grid));
+        cell.setSouth(getGridCell(row + 1, column, grid));
+        cell.setEast(getGridCell(row, column + 1, grid));
       }
     }
+  }
+
+  private Cell getGridCell(int row, int column, Cell[][] grid) {
+    Cell resultCell = null;
+    if ((row >= 0 && row < rows) && (column >= 0 && (column < columns))) {
+      resultCell = grid[row][column];
+    }
+    return resultCell;
   }
 
   protected int generateRandomIndex(List<Cell> neighbors) {
     Random r = new Random();
     return r.ints(1, 0, neighbors.size()).findFirst().getAsInt();
-  }
-
-  private static Cell getGridCell(int row, int column, Cell[][] grid, int rows, int columns) {
-    Cell resultCell = null;
-    if ((row >= 0 && row < rows) &&
-            (column >= 0 && (column < columns))) {
-      resultCell = grid[row][column];
-    }
-    return resultCell;
   }
 }

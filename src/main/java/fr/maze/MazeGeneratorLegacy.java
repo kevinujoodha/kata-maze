@@ -5,20 +5,24 @@ import java.util.List;
 import java.util.Random;
 
 public class MazeGeneratorLegacy {
+  private int rows;
+  private int columns;
+
   public StringBuffer generateMaze() {
-    int rows = 7;
-    int columns = 7;
-    Cell[][] grid = new Cell[rows][columns];
+    rows = 7;
+    columns = 7;
+
+    CellLegacy[][] grid = new CellLegacy[rows][columns];
 
     //initialize the maze
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
-        grid[row][column] = new Cell(row, column);
+        grid[row][column] = new CellLegacy(row, column);
       }
     }
 
-    for (Cell[] gridRow : grid) {
-      for (Cell cell : gridRow) {
+    for (CellLegacy[] gridRow : grid) {
+      for (CellLegacy cell : gridRow) {
         int row = cell.getRow();
         int column = cell.getColumn();
 
@@ -30,9 +34,9 @@ public class MazeGeneratorLegacy {
     }
 
     //compute the maze : BinaryTree algorithm used here
-    for (Cell[] gridRow : grid) {
-      for (Cell cell : gridRow) {
-        List<Cell> neighbors = new ArrayList<Cell>();
+    for (CellLegacy[] gridRow : grid) {
+      for (CellLegacy cell : gridRow) {
+        List<CellLegacy> neighbors = new ArrayList<CellLegacy>();
         if (cell.getNorth() != null) {
           neighbors.add(cell.getNorth());
         }
@@ -40,7 +44,7 @@ public class MazeGeneratorLegacy {
           neighbors.add(cell.getEast());
         }
 
-        Cell neighborCell = null;
+        CellLegacy neighborCell = null;
         if (neighbors.size() > 0) {
           int randomIndex = generateRandomIndex(neighbors);
           neighborCell = neighbors.get(randomIndex);
@@ -62,23 +66,21 @@ public class MazeGeneratorLegacy {
     }
     sb.append("\n");
 
-    for (Cell[] row : grid) {
+    for (CellLegacy[] row : grid) {
       StringBuffer top = new StringBuffer();
       top.append("|");
       StringBuffer bottom = new StringBuffer();
       bottom.append("+");
 
-      for (Cell cell : row) {
-        cell = (cell == null ? new Cell(-1, -1) : cell);
+      for (CellLegacy cell : row) {
+        cell = (cell == null ? new CellLegacy(-1, -1) : cell);
 
-        boolean islinked = (cell.getNeighbors().get(cell.getEast()) != null ?
-                cell.getNeighbors().get(cell.getEast()).booleanValue() : false);
+        boolean islinked = (cell.getNeighbors().get(cell.getEast()) != null && cell.getNeighbors().get(cell.getEast()));
 
         String eastBoundary = (islinked ? " " : "|");
         top.append("   ").append(eastBoundary);
 
-        islinked = (cell.getNeighbors().get(cell.getSouth()) != null ?
-                cell.getNeighbors().get(cell.getSouth()).booleanValue() : false);
+        islinked = (cell.getNeighbors().get(cell.getSouth()) != null && cell.getNeighbors().get(cell.getSouth()));
 
         String southBoundary = (islinked ? "   " : "---");
         bottom.append(southBoundary).append("+");
@@ -90,13 +92,13 @@ public class MazeGeneratorLegacy {
     return sb;
   }
 
-  protected int generateRandomIndex(List<Cell> neighbors) {
+  protected int generateRandomIndex(List<CellLegacy> neighbors) {
     Random r = new Random();
     return r.ints(1, 0, neighbors.size()).findFirst().getAsInt();
   }
 
-  private static Cell getGridCell(int row, int column, Cell[][] grid, int rows, int columns) {
-    Cell resultCell = null;
+  private static CellLegacy getGridCell(int row, int column, CellLegacy[][] grid, int rows, int columns) {
+    CellLegacy resultCell = null;
     if ((row >= 0 && row < rows) &&
             (column >= 0 && (column < columns))) {
       resultCell = grid[row][column];
