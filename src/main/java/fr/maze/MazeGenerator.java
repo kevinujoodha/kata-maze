@@ -5,29 +5,28 @@ import java.util.List;
 import java.util.Random;
 
 public class MazeGenerator {
+  private int rows;
+  private int columns;
+  private RGrid rgrid;
+
   public StringBuffer generateMaze() {
-    int rows = 7;
-    int columns = 7;
+    rows = 7;
+    columns = 7;
+    rgrid = new RGrid();
+
     Cell[][] grid = new Cell[rows][columns];
 
     //initialize the maze
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
         grid[row][column] = new Cell(row, column);
+
+        rgrid.addCell(new RCell(row, column));
       }
     }
 
-    for (Cell[] gridRow : grid) {
-      for (Cell cell : gridRow) {
-        int row = cell.getRow();
-        int column = cell.getColumn();
-
-        cell.setNorth(getGridCell(row - 1, column, grid, rows, columns));
-        cell.setSouth(getGridCell(row + 1, column, grid, rows, columns));
-        cell.setWest(getGridCell(row, column - 1, grid, rows, columns));
-        cell.setEast(getGridCell(row, column + 1, grid, rows, columns));
-      }
-    }
+    // THIS IS USELESS
+    setCellsNeighbors(grid);
 
     //compute the maze : BinaryTree algorithm used here
     for (Cell[] gridRow : grid) {
@@ -86,6 +85,20 @@ public class MazeGenerator {
       sb.append(bottom).append("\n");
     }
     return sb;
+  }
+
+  protected void setCellsNeighbors(Cell[][] grid) {
+    for (Cell[] gridRow : grid) {
+      for (Cell cell : gridRow) {
+        int row = cell.getRow();
+        int column = cell.getColumn();
+
+        cell.setNorth(getGridCell(row - 1, column, grid, rows, columns));
+        cell.setSouth(getGridCell(row + 1, column, grid, rows, columns));
+        cell.setWest(getGridCell(row, column - 1, grid, rows, columns));
+        cell.setEast(getGridCell(row, column + 1, grid, rows, columns));
+      }
+    }
   }
 
   protected int generateRandomIndex(List<Cell> neighbors) {
