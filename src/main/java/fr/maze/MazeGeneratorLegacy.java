@@ -75,12 +75,14 @@ public class MazeGeneratorLegacy {
       for (CellLegacy cell : row) {
         cell = (cell == null ? new CellLegacy(-1, -1) : cell);
 
-        boolean islinked = (cell.getNeighbors().get(cell.getEast()) != null && cell.getNeighbors().get(cell.getEast()));
+        boolean islinked = (cell.getNeighbors().get(cell.getEast()) != null ?
+                cell.getNeighbors().get(cell.getEast()).booleanValue() : false);
 
         String eastBoundary = (islinked ? " " : "|");
         top.append("   ").append(eastBoundary);
 
-        islinked = (cell.getNeighbors().get(cell.getSouth()) != null && cell.getNeighbors().get(cell.getSouth()));
+        islinked = (cell.getNeighbors().get(cell.getSouth()) != null ?
+                cell.getNeighbors().get(cell.getSouth()).booleanValue() : false);
 
         String southBoundary = (islinked ? "   " : "---");
         bottom.append(southBoundary).append("+");

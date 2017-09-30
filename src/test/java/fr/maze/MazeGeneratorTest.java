@@ -31,8 +31,8 @@ public class MazeGeneratorTest {
 
   private class TestableMazeGenerator extends MazeGenerator {
     @Override
-    protected int generateRandomIndex(List<Cell> neighbors) {
-      return neighbors.size() - 1;
+    protected int generateRandomIndex(int maxRandom) {
+      return maxRandom - 1;
     }
   }
 

@@ -22,28 +22,21 @@ public class MazeGenerator {
     //compute the maze : BinaryTree algorithm used here
     for (Cell[] gridRow : grid) {
       for (Cell cell : gridRow) {
-        List<Cell> neighbors = new ArrayList<Cell>();
-
-
-        if (cell.getNorth() != null) {
-          neighbors.add(cell.getNorth());
-        }
-
-        if (cell.getEast() != null) {
-          neighbors.add(cell.getEast());
-        }
+        List<Cell> potentialLinkedNeighbors = findNeighbors(grid, cell, Direction.NORTH, Direction.EAST);
 
         Cell neighborCell = null;
-        if (neighbors.size() > 0) {
-          int randomIndex = generateRandomIndex(neighbors);
-          neighborCell = neighbors.get(randomIndex);
+        if (potentialLinkedNeighbors.size() > 0) {
+          int randomIndex = generateRandomIndex(potentialLinkedNeighbors.size());
+          neighborCell = potentialLinkedNeighbors.get(randomIndex);
         }
 
+        // INSERT A LINKED CELL
 
         if (neighborCell != null) {
           cell.getNeighbors().put(neighborCell, true);
           neighborCell.getNeighbors().put(cell, true);
         }
+
       }
     }
 
@@ -82,6 +75,27 @@ public class MazeGenerator {
     return sb;
   }
 
+
+  private List<Cell> findNeighbors(Cell[][] grid, Cell cell, Direction ...directions) {
+    List<Cell> foundNeighbors = new ArrayList<>();
+
+    for (Direction direction : directions) {
+      if (neighborIsInGrid(cell, direction)) {
+        foundNeighbors.add(grid[cell.getRow() + direction.verticalShift][cell.getColumn() + direction.horizontalShift]);
+      }
+    }
+
+    return foundNeighbors;
+  }
+
+  private boolean neighborIsInGrid(Cell cell, Direction direction) {
+    return cell.getRow() + direction.verticalShift >= 0
+            && cell.getRow() + direction.verticalShift < rows
+            && cell.getColumn() + direction.horizontalShift >= 0
+            && cell.getColumn() + direction.horizontalShift < columns;
+  }
+
+
   private void initializeMaze(Cell[][] grid) {
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
@@ -109,8 +123,8 @@ public class MazeGenerator {
     return resultCell;
   }
 
-  protected int generateRandomIndex(List<Cell> neighbors) {
+  protected int generateRandomIndex(int maxRandom) {
     Random r = new Random();
-    return r.ints(1, 0, neighbors.size()).findFirst().getAsInt();
+    return r.ints(1, 0, maxRandom).findFirst().getAsInt();
   }
 }
