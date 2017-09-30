@@ -1,8 +1,10 @@
 package fr.maze;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class MazeGenerator {
   private int rows;
@@ -76,16 +78,11 @@ public class MazeGenerator {
   }
 
 
-  private List<Cell> findNeighbors(Cell[][] grid, Cell cell, Direction ...directions) {
-    List<Cell> foundNeighbors = new ArrayList<>();
-
-    for (Direction direction : directions) {
-      if (neighborIsInGrid(cell, direction)) {
-        foundNeighbors.add(grid[cell.getRow() + direction.verticalShift][cell.getColumn() + direction.horizontalShift]);
-      }
-    }
-
-    return foundNeighbors;
+  private List<Cell> findNeighbors(Cell[][] grid, Cell cell, Direction... directions) {
+    return Arrays.stream(directions)
+            .filter(direction -> neighborIsInGrid(cell, direction))
+            .map(direction -> getCellNeighbor(grid, cell, direction))
+            .collect(Collectors.toList());
   }
 
   private boolean neighborIsInGrid(Cell cell, Direction direction) {
@@ -93,6 +90,10 @@ public class MazeGenerator {
             && cell.getRow() + direction.verticalShift < rows
             && cell.getColumn() + direction.horizontalShift >= 0
             && cell.getColumn() + direction.horizontalShift < columns;
+  }
+
+  private Cell getCellNeighbor(Cell[][] grid, Cell cell, Direction direction) {
+    return grid[cell.getRow() + direction.verticalShift][cell.getColumn() + direction.horizontalShift];
   }
 
 
