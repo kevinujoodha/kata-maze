@@ -1,4 +1,6 @@
-package fr.maze;
+package fr.maze.domain;
+
+import fr.maze.utils.Utils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +38,7 @@ class Grid {
             .forEach(cell -> {
               List<Cell> potentialLinkedNeighbors = findNeighbors(cell, Direction.NORTH, Direction.EAST);
               if (potentialLinkedNeighbors.size() > 0) {
-                Cell neighborCell = potentialLinkedNeighbors.get(Util.generateRandomIndex(potentialLinkedNeighbors.size()));
+                Cell neighborCell = potentialLinkedNeighbors.get(Utils.generateRandomIndex(potentialLinkedNeighbors.size()));
                 cell.setLinkedNeighbor(neighborCell);
                 neighborCell.setLinkedNeighbor(cell);
               }

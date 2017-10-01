@@ -1,4 +1,4 @@
-package fr.maze;
+package fr.maze.domain;
 
 public class MazeGenerator {
   public StringBuffer generateMaze(int rowNumber, int columnNumber) {

@@ -1,4 +1,4 @@
-package fr.maze;
+package fr.maze.domain;
 
 public enum Direction {
   NORTH(-1, 0),
