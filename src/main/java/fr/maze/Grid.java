@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class Grid {
+class Grid {
   private int rows;
   private int columns;
   private Cell[][] grid;
 
-  public Grid(int rows, int columns) {
+  Grid(int rows, int columns) {
     this.rows = rows;
     this.columns = columns;
 
@@ -22,50 +22,42 @@ public class Grid {
             });
   }
 
-  public Cell[][] getGrid() {
+  Cell[][] getGrid() {
     return grid;
   }
 
-  public int getColumnsNumber() {
+  int getColumnsNumber() {
     return columns;
   }
 
-  protected void computeMaze() {
+  void computeMaze() {
     Arrays.stream(grid)
             .flatMap(Arrays::stream)
             .forEach(cell -> {
               List<Cell> potentialLinkedNeighbors = findNeighbors(cell, Direction.NORTH, Direction.EAST);
               if (potentialLinkedNeighbors.size() > 0) {
-                int randomIndex = Grid.generateRandomIndex(potentialLinkedNeighbors.size());
-
-                Cell neighborCell = potentialLinkedNeighbors.get(randomIndex);
+                Cell neighborCell = potentialLinkedNeighbors.get(Util.generateRandomIndex(potentialLinkedNeighbors.size()));
                 cell.setLinkedNeighbor(neighborCell);
                 neighborCell.setLinkedNeighbor(cell);
               }
             });
   }
 
-  public List<Cell> findNeighbors(Cell cell, Direction... directions) {
+  private List<Cell> findNeighbors(Cell cell, Direction... directions) {
     return Arrays.stream(directions)
             .filter(direction -> neighborIsInGrid(cell, direction))
             .map(direction -> getCellNeighbor(cell, direction))
             .collect(Collectors.toList());
   }
 
-  public boolean neighborIsInGrid(Cell cell, Direction direction) {
+  private boolean neighborIsInGrid(Cell cell, Direction direction) {
     return cell.getRow() + direction.verticalShift >= 0
             && cell.getRow() + direction.verticalShift < rows
             && cell.getColumn() + direction.horizontalShift >= 0
             && cell.getColumn() + direction.horizontalShift < columns;
   }
 
-  public Cell getCellNeighbor(Cell cell, Direction direction) {
+  private Cell getCellNeighbor(Cell cell, Direction direction) {
     return grid[cell.getRow() + direction.verticalShift][cell.getColumn() + direction.horizontalShift];
-  }
-
-  public static int generateRandomIndex(int maxRandom) {
-//    Random r = new Random();
-//    return r.ints(1, 0, maxRandom).findFirst().getAsInt();
-    return maxRandom - 1;
   }
 }

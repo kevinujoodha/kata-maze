@@ -3,8 +3,14 @@ package fr.maze;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-public class MazePrinter {
-  public StringBuffer print(Grid maze) {
+class MazePrinter {
+  private final Grid maze;
+
+  MazePrinter(Grid maze) {
+    this.maze = maze;
+  }
+
+  StringBuffer print() {
     StringBuffer sb = new StringBuffer();
 
     sb.append("+");
@@ -19,23 +25,22 @@ public class MazePrinter {
     return sb;
   }
 
-  public String buildRowRepresentation(Cell[] row) {
-    return new StringBuilder().append("|")
-            .append(buildRowTopRepresentation(row))
-            .append("\n")
-            .append("+")
-            .append(buildRowBottomRepresentation(row))
-            .append("\n")
-            .toString();
+  private String buildRowRepresentation(Cell[] row) {
+    return "|" +
+            buildRowTopRepresentation(row) +
+            "\n" +
+            "+" +
+            buildRowBottomRepresentation(row) +
+            "\n";
   }
 
-  public String buildRowBottomRepresentation(Cell[] row) {
+  private String buildRowBottomRepresentation(Cell[] row) {
     return Arrays.stream(row)
             .map(cell -> (cell.isLinkedNeighborOfDirection(Direction.SOUTH) ? "   " : "---") + "+")
             .reduce("", (a, b) -> a + b);
   }
 
-  public String buildRowTopRepresentation(Cell[] row) {
+  private String buildRowTopRepresentation(Cell[] row) {
     return Arrays.stream(row)
             .map(cell -> "   " + (cell.isLinkedNeighborOfDirection(Direction.EAST) ? " " : "|"))
             .reduce("", (a, b) -> a + b);
