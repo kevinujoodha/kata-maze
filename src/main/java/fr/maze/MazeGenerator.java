@@ -9,35 +9,22 @@ import java.util.stream.IntStream;
 public class MazeGenerator {
   private int rows;
   private int columns;
+  private Grid rgrid;
 
   public StringBuffer generateMaze() {
     rows = 7;
     columns = 7;
 
+    rgrid = new Grid(rows, columns);
+
 
     Cell[][] grid = new Cell[rows][columns];
 
-    //initialize the maze
-    for (int row1 = 0; row1 < rows; row1++) {
-      for (int column = 0; column < columns; column++) {
-        grid[row1][column] = new Cell(row1, column);
-      }
-    }
+
+    grid = rgrid.getGrid();
 
     //compute the maze : BinaryTree algorithm used here
-    Arrays.stream(grid)
-            .flatMap(Arrays::stream)
-            .forEach(cell -> {
-              List<Cell> potentialLinkedNeighbors = findNeighbors(grid, cell, Direction.NORTH, Direction.EAST);
-              if (potentialLinkedNeighbors.size() > 0) {
-                int randomIndex = generateRandomIndex(potentialLinkedNeighbors.size());
-                Cell neighborCell = potentialLinkedNeighbors.get(randomIndex);
-
-                // INSERT A LINKED CELL
-                cell.setLinkedNeighbor(neighborCell);
-                neighborCell.setLinkedNeighbor(cell);
-              }
-            });
+    computeMaze(grid);
 
 
     //Display the maze
@@ -78,22 +65,29 @@ public class MazeGenerator {
   }
 
 
+
+
+  protected void computeMaze(Cell[][] grid) {
+    Arrays.stream(grid)
+            .flatMap(Arrays::stream)
+            .forEach(cell -> {
+              List<Cell> potentialLinkedNeighbors = findNeighbors(grid, cell, Direction.NORTH, Direction.EAST);
+              if (potentialLinkedNeighbors.size() > 0) {
+                int randomIndex = generateRandomIndex(potentialLinkedNeighbors.size());
+                Cell neighborCell = potentialLinkedNeighbors.get(randomIndex);
+
+                // INSERT A LINKED CELL
+                cell.setLinkedNeighbor(neighborCell);
+                neighborCell.setLinkedNeighbor(cell);
+              }
+            });
+  }
+
   private List<Cell> findNeighbors(Cell[][] grid, Cell cell, Direction... directions) {
     return Arrays.stream(directions)
-            .filter(direction -> neighborIsInGrid(cell, direction))
-            .map(direction -> getCellNeighbor(grid, cell, direction))
+            .filter(direction -> rgrid.neighborIsInGrid(cell, direction))
+            .map(direction -> rgrid.getCellNeighbor(grid, cell, direction))
             .collect(Collectors.toList());
-  }
-
-  private boolean neighborIsInGrid(Cell cell, Direction direction) {
-    return cell.getRow() + direction.verticalShift >= 0
-            && cell.getRow() + direction.verticalShift < rows
-            && cell.getColumn() + direction.horizontalShift >= 0
-            && cell.getColumn() + direction.horizontalShift < columns;
-  }
-
-  private Cell getCellNeighbor(Cell[][] grid, Cell cell, Direction direction) {
-    return grid[cell.getRow() + direction.verticalShift][cell.getColumn() + direction.horizontalShift];
   }
 
   protected int generateRandomIndex(int maxRandom) {
