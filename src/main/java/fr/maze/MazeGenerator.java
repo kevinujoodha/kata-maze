@@ -49,25 +49,22 @@ public class MazeGenerator {
     sb.append("\n");
 
     for (Cell[] row : grid) {
-      StringBuffer top = new StringBuffer();
-      top.append("|");
-      StringBuffer bottom = new StringBuffer();
-      bottom.append("+");
+      sb.append("|");
+      sb.append(
+              Arrays.stream(row)
+                      .map(cell -> "   " + (cell.isLinkedNeighborOfDirection(Direction.EAST) ? " " : "|"))
+                      .reduce("", (a, b) -> a + b)
+      );
+      sb.append("\n");
 
-      for (Cell cell : row) {
-        boolean islinked = cell.isLinkedNeighborOfDirection(Direction.EAST);
+      sb.append("+");
+      sb.append(
+              Arrays.stream(row)
+                      .map(cell -> (cell.isLinkedNeighborOfDirection(Direction.SOUTH) ? "   " : "---") + "+")
+                      .reduce("", (a, b) -> a + b)
+      );
+      sb.append("\n");
 
-        String eastBoundary = (islinked ? " " : "|");
-        top.append("   ").append(eastBoundary);
-
-        islinked = cell.isLinkedNeighborOfDirection(Direction.SOUTH);
-
-        String southBoundary = (islinked ? "   " : "---");
-        bottom.append(southBoundary).append("+");
-      }
-
-      sb.append(top).append("\n");
-      sb.append(bottom).append("\n");
     }
     return sb;
   }
