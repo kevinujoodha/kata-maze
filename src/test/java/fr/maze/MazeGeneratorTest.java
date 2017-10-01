@@ -8,7 +8,7 @@ import java.util.List;
 public class MazeGeneratorTest {
   @Test
   public void should_always_give_same_output() throws Exception {
-    MazeGenerator mazeGenerator = new TestableMazeGenerator();
+    MazeGenerator mazeGenerator = new MazeGenerator();
 
     for (int i = 0; i < 1000; ++i) {
       StringBuffer mazeOne = mazeGenerator.generateMaze();
@@ -19,20 +19,13 @@ public class MazeGeneratorTest {
 
   @Test
   public void should_always_act_the_same() throws Exception {
-    MazeGenerator mazeGenerator = new TestableMazeGenerator();
+    MazeGenerator mazeGenerator = new MazeGenerator();
     MazeGeneratorLegacy mazeGeneratorLegacy = new TestableMazeGeneratorLegacy();
 
     for (int i = 0; i < 1000; ++i) {
       StringBuffer maze = mazeGenerator.generateMaze();
       StringBuffer mazeLegacy = mazeGeneratorLegacy.generateMaze();
       Assertions.assertThat(maze.toString()).isEqualTo(mazeLegacy.toString());
-    }
-  }
-
-  private class TestableMazeGenerator extends MazeGenerator {
-    @Override
-    protected int generateRandomIndex(int maxRandom) {
-      return maxRandom - 1;
     }
   }
 

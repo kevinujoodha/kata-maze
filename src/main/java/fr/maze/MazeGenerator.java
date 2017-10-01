@@ -24,7 +24,7 @@ public class MazeGenerator {
     grid = rgrid.getGrid();
 
     //compute the maze : BinaryTree algorithm used here
-    computeMaze(grid);
+    rgrid.computeMaze(grid);
 
 
     //Display the maze
@@ -65,33 +65,4 @@ public class MazeGenerator {
   }
 
 
-
-
-  protected void computeMaze(Cell[][] grid) {
-    Arrays.stream(grid)
-            .flatMap(Arrays::stream)
-            .forEach(cell -> {
-              List<Cell> potentialLinkedNeighbors = findNeighbors(grid, cell, Direction.NORTH, Direction.EAST);
-              if (potentialLinkedNeighbors.size() > 0) {
-                int randomIndex = generateRandomIndex(potentialLinkedNeighbors.size());
-                Cell neighborCell = potentialLinkedNeighbors.get(randomIndex);
-
-                // INSERT A LINKED CELL
-                cell.setLinkedNeighbor(neighborCell);
-                neighborCell.setLinkedNeighbor(cell);
-              }
-            });
-  }
-
-  private List<Cell> findNeighbors(Cell[][] grid, Cell cell, Direction... directions) {
-    return Arrays.stream(directions)
-            .filter(direction -> rgrid.neighborIsInGrid(cell, direction))
-            .map(direction -> rgrid.getCellNeighbor(grid, cell, direction))
-            .collect(Collectors.toList());
-  }
-
-  protected int generateRandomIndex(int maxRandom) {
-    Random r = new Random();
-    return r.ints(1, 0, maxRandom).findFirst().getAsInt();
-  }
 }
