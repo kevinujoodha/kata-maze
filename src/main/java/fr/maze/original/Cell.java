@@ -1,9 +1,8 @@
-package fr.maze;
+/*package fr.maze.original;
 
 import java.util.HashMap;
 
-public class Cell
-{
+public class Cell {
   private int row, column;
   private HashMap<Cell, Boolean> neighbors = new HashMap<Cell, Boolean>();
   private Cell north, south, east, west;
@@ -61,3 +60,4 @@ public class Cell
     this.west = west;
   }
 }
+*/
