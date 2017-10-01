@@ -1,5 +1,7 @@
 package fr.maze.domain;
 
+import fr.maze.domain.legacy.CellLegacy;
+import fr.maze.domain.legacy.MazeGeneratorLegacy;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package fr.maze.domain;
+package fr.maze.domain.legacy;
 
 import java.util.ArrayList;
 import java.util.List;
