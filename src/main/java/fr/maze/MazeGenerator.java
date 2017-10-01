@@ -48,25 +48,35 @@ public class MazeGenerator {
     }
     sb.append("\n");
 
-    for (Cell[] row : grid) {
-      sb.append("|");
-      sb.append(
-              Arrays.stream(row)
-                      .map(cell -> "   " + (cell.isLinkedNeighborOfDirection(Direction.EAST) ? " " : "|"))
-                      .reduce("", (a, b) -> a + b)
-      );
-      sb.append("\n");
+    String hello = Arrays.stream(grid)
+            .map(this::buildRowRepresentation)
+            .reduce("", (a, b) -> a + b);
 
-      sb.append("+");
-      sb.append(
-              Arrays.stream(row)
-                      .map(cell -> (cell.isLinkedNeighborOfDirection(Direction.SOUTH) ? "   " : "---") + "+")
-                      .reduce("", (a, b) -> a + b)
-      );
-      sb.append("\n");
+    sb.append(hello);
 
-    }
     return sb;
+  }
+
+  private String buildRowRepresentation(Cell[] row) {
+    return new StringBuilder().append("|")
+            .append(buildRowTopRepresentation(row))
+            .append("\n")
+            .append("+")
+            .append(buildRowBottomRepresentation(row))
+            .append("\n")
+            .toString();
+  }
+
+  private String buildRowBottomRepresentation(Cell[] row) {
+    return Arrays.stream(row)
+            .map(cell -> (cell.isLinkedNeighborOfDirection(Direction.SOUTH) ? "   " : "---") + "+")
+            .reduce("", (a, b) -> a + b);
+  }
+
+  private String buildRowTopRepresentation(Cell[] row) {
+    return Arrays.stream(row)
+            .map(cell -> "   " + (cell.isLinkedNeighborOfDirection(Direction.EAST) ? " " : "|"))
+            .reduce("", (a, b) -> a + b);
   }
 
 
