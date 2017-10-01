@@ -1,41 +1,27 @@
 package fr.maze;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class MazeGenerator {
-  private int rows;
-  private int columns;
-  private Grid rgrid;
+  private Grid grid;
 
   public StringBuffer generateMaze() {
-    rows = 7;
-    columns = 7;
-
-    rgrid = new Grid(rows, columns);
-
-
-    Cell[][] grid = new Cell[rows][columns];
-
-
-    grid = rgrid.getGrid();
+    grid = new Grid(7, 7);
 
     //compute the maze : BinaryTree algorithm used here
-    rgrid.computeMaze(grid);
+    grid.computeMaze();
 
 
     //Display the maze
     StringBuffer sb = new StringBuffer();
 
     sb.append("+");
-    IntStream.range(0, columns)
+    IntStream.range(0, grid.getColumnsNumber())
             .forEach(i -> sb.append("---+"));
     sb.append("\n");
 
-    sb.append(Arrays.stream(grid)
+    sb.append(Arrays.stream(grid.getGrid())
             .map(this::buildRowRepresentation)
             .reduce("", (a, b) -> a + b));
 
@@ -63,6 +49,4 @@ public class MazeGenerator {
             .map(cell -> "   " + (cell.isLinkedNeighborOfDirection(Direction.EAST) ? " " : "|"))
             .reduce("", (a, b) -> a + b);
   }
-
-
 }

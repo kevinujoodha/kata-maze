@@ -26,13 +26,15 @@ public class Grid {
     return grid;
   }
 
-  protected void computeMaze(Cell[][] grid) {
-    this.grid = grid;
+  public int getColumnsNumber() {
+    return columns;
+  }
 
+  protected void computeMaze() {
     Arrays.stream(grid)
             .flatMap(Arrays::stream)
             .forEach(cell -> {
-              List<Cell> potentialLinkedNeighbors = findNeighbors(grid, cell, Direction.NORTH, Direction.EAST);
+              List<Cell> potentialLinkedNeighbors = findNeighbors(cell, Direction.NORTH, Direction.EAST);
               if (potentialLinkedNeighbors.size() > 0) {
                 int randomIndex = Grid.generateRandomIndex(potentialLinkedNeighbors.size());
 
@@ -43,7 +45,7 @@ public class Grid {
             });
   }
 
-  public List<Cell> findNeighbors(Cell[][] grid, Cell cell, Direction... directions) {
+  public List<Cell> findNeighbors(Cell cell, Direction... directions) {
     return Arrays.stream(directions)
             .filter(direction -> neighborIsInGrid(cell, direction))
             .map(direction -> getCellNeighbor(cell, direction))
