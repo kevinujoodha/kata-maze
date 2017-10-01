@@ -1,8 +1,8 @@
 package fr.maze;
 
 public class MazeGenerator {
-  public StringBuffer generateMaze() {
-    Grid grid = new Grid(7, 7);
+  public StringBuffer generateMaze(int rowNumber, int columnNumber) {
+    Grid grid = new Grid(rowNumber, columnNumber);
     grid.computeMaze();
 
     MazePrinter printer = new MazePrinter();
