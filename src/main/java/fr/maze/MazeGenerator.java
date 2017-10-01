@@ -17,26 +17,27 @@ public class MazeGenerator {
     Cell[][] grid = new Cell[rows][columns];
 
     //initialize the maze
-    // TODO: To delete
-    initializeMaze(grid);
-
-    //compute the maze : BinaryTree algorithm used here
-    for (Cell[] gridRow : grid) {
-      for (Cell cell : gridRow) {
-        List<Cell> potentialLinkedNeighbors = findNeighbors(grid, cell, Direction.NORTH, Direction.EAST);
-
-
-        Cell neighborCell = null;
-        if (potentialLinkedNeighbors.size() > 0) {
-          int randomIndex = generateRandomIndex(potentialLinkedNeighbors.size());
-          neighborCell = potentialLinkedNeighbors.get(randomIndex);
-
-          // INSERT A LINKED CELL
-          cell.setLinkedNeighbor(neighborCell);
-          neighborCell.setLinkedNeighbor(cell);
-        }
+    for (int row1 = 0; row1 < rows; row1++) {
+      for (int column = 0; column < columns; column++) {
+        grid[row1][column] = new Cell(row1, column);
       }
     }
+
+    //compute the maze : BinaryTree algorithm used here
+    Arrays.stream(grid)
+            .flatMap(Arrays::stream)
+            .forEach(cell -> {
+              List<Cell> potentialLinkedNeighbors = findNeighbors(grid, cell, Direction.NORTH, Direction.EAST);
+              if (potentialLinkedNeighbors.size() > 0) {
+                int randomIndex = generateRandomIndex(potentialLinkedNeighbors.size());
+                Cell neighborCell = potentialLinkedNeighbors.get(randomIndex);
+
+                // INSERT A LINKED CELL
+                cell.setLinkedNeighbor(neighborCell);
+                neighborCell.setLinkedNeighbor(cell);
+              }
+            });
+
 
     //Display the maze
     StringBuffer sb = new StringBuffer();
@@ -54,11 +55,7 @@ public class MazeGenerator {
       bottom.append("+");
 
       for (Cell cell : row) {
-        cell = (cell == null ? new Cell(-1, -1) : cell);
-
-
         boolean islinked = cell.isLinkedNeighborOfDirection(Direction.EAST);
-
 
         String eastBoundary = (islinked ? " " : "|");
         top.append("   ").append(eastBoundary);
@@ -74,8 +71,6 @@ public class MazeGenerator {
     }
     return sb;
   }
-
-
 
 
   private List<Cell> findNeighbors(Cell[][] grid, Cell cell, Direction... directions) {
@@ -94,36 +89,6 @@ public class MazeGenerator {
 
   private Cell getCellNeighbor(Cell[][] grid, Cell cell, Direction direction) {
     return grid[cell.getRow() + direction.verticalShift][cell.getColumn() + direction.horizontalShift];
-  }
-
-
-
-
-  private void initializeMaze(Cell[][] grid) {
-    for (int row = 0; row < rows; row++) {
-      for (int column = 0; column < columns; column++) {
-        grid[row][column] = new Cell(row, column);
-      }
-    }
-
-    for (Cell[] gridRow : grid) {
-      for (Cell cell : gridRow) {
-        int row = cell.getRow();
-        int column = cell.getColumn();
-
-        cell.setNorth(getGridCell(row - 1, column, grid));
-        cell.setSouth(getGridCell(row + 1, column, grid));
-        cell.setEast(getGridCell(row, column + 1, grid));
-      }
-    }
-  }
-
-  private Cell getGridCell(int row, int column, Cell[][] grid) {
-    Cell resultCell = null;
-    if ((row >= 0 && row < rows) && (column >= 0 && (column < columns))) {
-      resultCell = grid[row][column];
-    }
-    return resultCell;
   }
 
   protected int generateRandomIndex(int maxRandom) {
