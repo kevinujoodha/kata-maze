@@ -1,14 +1,12 @@
 package fr.maze;
 
-import java.util.HashMap;
-
 public class Cell
 {
   private int row, column;
-  private HashMap<Cell, Boolean> neighbors = new HashMap<Cell, Boolean>();
   private Cell north;
   private Cell south;
   private Cell east;
+  private Cell linkedNeighbor;
 
   public Cell(int row, int column) {
     this.row = row;
@@ -23,31 +21,29 @@ public class Cell
     return column;
   }
 
-  public HashMap<Cell, Boolean> getNeighbors() {
-    return neighbors;
-  }
-
-  public Cell getNorth() {
-    return north;
-  }
-
   public void setNorth(Cell north) {
     this.north = north;
-  }
-
-  public Cell getSouth() {
-    return south;
   }
 
   public void setSouth(Cell south) {
     this.south = south;
   }
 
-  public Cell getEast() {
-    return east;
-  }
-
   public void setEast(Cell east) {
     this.east = east;
+  }
+
+  public void setLinkedNeighbor(Cell neighborCell) {
+    this.linkedNeighbor = neighborCell;
+  }
+
+  public boolean isLinkedNeighborOfDirection(Direction direction) {
+    if (linkedNeighbor == null)
+      return false;
+
+    if (row + direction.verticalShift == linkedNeighbor.row && column + direction.horizontalShift == linkedNeighbor.column)
+      return true;
+
+    return false;
   }
 }

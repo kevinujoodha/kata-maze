@@ -1,6 +1,5 @@
 package fr.maze;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -26,19 +25,16 @@ public class MazeGenerator {
       for (Cell cell : gridRow) {
         List<Cell> potentialLinkedNeighbors = findNeighbors(grid, cell, Direction.NORTH, Direction.EAST);
 
+
         Cell neighborCell = null;
         if (potentialLinkedNeighbors.size() > 0) {
           int randomIndex = generateRandomIndex(potentialLinkedNeighbors.size());
           neighborCell = potentialLinkedNeighbors.get(randomIndex);
+
+          // INSERT A LINKED CELL
+          cell.setLinkedNeighbor(neighborCell);
+          neighborCell.setLinkedNeighbor(cell);
         }
-
-        // INSERT A LINKED CELL
-
-        if (neighborCell != null) {
-          cell.getNeighbors().put(neighborCell, true);
-          neighborCell.getNeighbors().put(cell, true);
-        }
-
       }
     }
 
@@ -60,12 +56,14 @@ public class MazeGenerator {
       for (Cell cell : row) {
         cell = (cell == null ? new Cell(-1, -1) : cell);
 
-        boolean islinked = (cell.getNeighbors().get(cell.getEast()) != null && cell.getNeighbors().get(cell.getEast()));
+
+        boolean islinked = cell.isLinkedNeighborOfDirection(Direction.EAST);
+
 
         String eastBoundary = (islinked ? " " : "|");
         top.append("   ").append(eastBoundary);
 
-        islinked = (cell.getNeighbors().get(cell.getSouth()) != null && cell.getNeighbors().get(cell.getSouth()));
+        islinked = cell.isLinkedNeighborOfDirection(Direction.SOUTH);
 
         String southBoundary = (islinked ? "   " : "---");
         bottom.append(southBoundary).append("+");
@@ -76,6 +74,8 @@ public class MazeGenerator {
     }
     return sb;
   }
+
+
 
 
   private List<Cell> findNeighbors(Cell[][] grid, Cell cell, Direction... directions) {
@@ -95,6 +95,8 @@ public class MazeGenerator {
   private Cell getCellNeighbor(Cell[][] grid, Cell cell, Direction direction) {
     return grid[cell.getRow() + direction.verticalShift][cell.getColumn() + direction.horizontalShift];
   }
+
+
 
 
   private void initializeMaze(Cell[][] grid) {
