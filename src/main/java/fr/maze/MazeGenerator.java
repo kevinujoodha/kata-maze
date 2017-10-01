@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class MazeGenerator {
   private int rows;
@@ -43,16 +44,13 @@ public class MazeGenerator {
     StringBuffer sb = new StringBuffer();
 
     sb.append("+");
-    for (int colCount = 0; colCount < columns; colCount++) {
-      sb.append("---+");
-    }
+    IntStream.range(0, columns)
+            .forEach(i -> sb.append("---+"));
     sb.append("\n");
 
-    String hello = Arrays.stream(grid)
+    sb.append(Arrays.stream(grid)
             .map(this::buildRowRepresentation)
-            .reduce("", (a, b) -> a + b);
-
-    sb.append(hello);
+            .reduce("", (a, b) -> a + b));
 
     return sb;
   }
