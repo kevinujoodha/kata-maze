@@ -1,4 +1,4 @@
-/*package fr.maze.original;
+package fr.maze.original;
 
 import java.util.HashMap;
 
@@ -60,4 +60,3 @@ public class Cell {
     this.west = west;
   }
 }
-*/

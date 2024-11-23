@@ -1,4 +1,4 @@
-/*package fr.maze.original;
+package fr.maze.original;
 
 import java.util.*;
 
@@ -101,4 +101,4 @@ public class Main {
     return resultCell;
   }
 
-}*/
+}
