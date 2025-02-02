@@ -1,4 +1,4 @@
-package fr.maze.original;
+package fr.maze.original.models;
 
 import java.util.HashSet;
 import java.util.Set;

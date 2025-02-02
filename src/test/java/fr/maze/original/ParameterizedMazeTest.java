@@ -1,5 +1,7 @@
 package fr.maze.original;
 
+import fr.maze.original.generators.implementations.BinaryTreeMazeGenerator;
+import fr.maze.original.models.Maze;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -125,6 +127,6 @@ public class ParameterizedMazeTest {
         when(randomMock.ints(1, 0, 2))
                 .thenReturn(IntStream.of(randomIndexes.get(0)), randomIndexes.stream().skip(1).map(IntStream::of).toArray(IntStream[]::new));
 
-        assertThat((new Maze(7, 7, randomMock)).toString()).isEqualTo(expectedMaze);
+        assertThat((new Maze(7, 7, new BinaryTreeMazeGenerator(randomMock))).toString()).isEqualTo(expectedMaze);
     }
 }

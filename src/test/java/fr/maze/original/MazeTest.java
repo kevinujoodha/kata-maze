@@ -1,5 +1,7 @@
 package fr.maze.original;
 
+import fr.maze.original.generators.implementations.BinaryTreeMazeGenerator;
+import fr.maze.original.models.Maze;
 import org.junit.Test;
 
 import java.util.Random;
@@ -16,7 +18,7 @@ public class MazeTest {
         when(randomMock.ints(anyLong(), anyInt(), anyInt()))
                 .thenAnswer(invocationOnMock -> IntStream.of(0));
 
-        assertThat((new Maze(7, 7, randomMock)).toString()).isEqualTo(
+        assertThat((new Maze(7, 7, new BinaryTreeMazeGenerator(randomMock))).toString()).isEqualTo(
                 "+---+---+---+---+---+---+---+\n" +
                         "|                           |\n" +
                         "+   +   +   +   +   +   +   +\n" +
@@ -42,7 +44,7 @@ public class MazeTest {
         when(randomMock.ints(1, 0, 2))
                 .thenAnswer(invocationOnMock -> IntStream.of(1));
 
-        assertThat((new Maze(7, 7, randomMock)).toString()).isEqualTo(
+        assertThat((new Maze(7, 7, new BinaryTreeMazeGenerator(randomMock))).toString()).isEqualTo(
                 "+---+---+---+---+---+---+---+\n" +
                         "|                           |\n" +
                         "+---+---+---+---+---+---+   +\n" +
@@ -63,7 +65,7 @@ public class MazeTest {
     @Test
     public void should_generate_random_mazes_with_corrects_borders_and_separators() {
         for (int i = 0; i < 10; i++) {
-            checkMazeSeparators((new Maze(7, 7, new Random())).toString());
+            checkMazeSeparators((new Maze(7, 7, new BinaryTreeMazeGenerator(new Random()))).toString());
         }
     }
 

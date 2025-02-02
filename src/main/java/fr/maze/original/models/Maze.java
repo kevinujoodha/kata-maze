@@ -1,23 +1,19 @@
-package fr.maze.original;
+package fr.maze.original.models;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import fr.maze.original.generators.MazeGenerator;
 
 public class Maze {
     private final int rows;
     private final int columns;
-    private final Random random;
+    private final MazeGenerator mazeGenerator;
     private Cell[][] grid;
 
-    public Maze(int rows, int columns, Random random) {
+    public Maze(int rows, int columns, MazeGenerator mazeGenerator) {
         this.rows = rows;
         this.columns = columns;
-        this.random = random;
+        this.mazeGenerator = mazeGenerator;
         initGrid();
-        generateMaze();
+        mazeGenerator.generateMaze(grid, rows, columns);
     }
 
     private void initGrid() {
@@ -37,22 +33,6 @@ public class Maze {
                 cell.setSouth(getGridCell(row + 1, column));
                 cell.setWest(getGridCell(row, column - 1));
                 cell.setEast(getGridCell(row, column + 1));
-            }
-        }
-    }
-
-    private void generateMaze() {
-        for (Cell[] gridRow : grid) {
-            for (Cell cell : gridRow) {
-                List<Cell> neighbors = Stream.of(cell.getNorth(), cell.getEast()).filter(Objects::nonNull).collect(Collectors.toList());
-                if (!neighbors.isEmpty()) {
-                    int randomIndex = random.ints(1, 0, neighbors.size()).findFirst().orElse(0);
-                    Cell neighborCell = neighbors.get(randomIndex);
-                    if (neighborCell != null) {
-                        cell.addNeighbors(neighborCell);
-                        neighborCell.addNeighbors(cell);
-                    }
-                }
             }
         }
     }
