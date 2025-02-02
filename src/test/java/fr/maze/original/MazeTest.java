@@ -16,7 +16,7 @@ public class MazeTest {
         when(randomMock.ints(anyLong(), anyInt(), anyInt()))
                 .thenAnswer(invocationOnMock -> IntStream.of(0));
 
-        assertThat(Maze.generate(randomMock)).isEqualTo(
+        assertThat((new Maze(7, 7, randomMock)).toString()).isEqualTo(
                 "+---+---+---+---+---+---+---+\n" +
                         "|                           |\n" +
                         "+   +   +   +   +   +   +   +\n" +
@@ -42,7 +42,7 @@ public class MazeTest {
         when(randomMock.ints(1, 0, 2))
                 .thenAnswer(invocationOnMock -> IntStream.of(1));
 
-        assertThat(Maze.generate(randomMock)).isEqualTo(
+        assertThat((new Maze(7, 7, randomMock)).toString()).isEqualTo(
                 "+---+---+---+---+---+---+---+\n" +
                         "|                           |\n" +
                         "+---+---+---+---+---+---+   +\n" +
@@ -63,7 +63,7 @@ public class MazeTest {
     @Test
     public void should_generate_random_mazes_with_corrects_borders_and_separators() {
         for (int i = 0; i < 10; i++) {
-            checkMazeSeparators(Maze.generate(new Random()));
+            checkMazeSeparators((new Maze(7, 7, new Random())).toString());
         }
     }
 

@@ -5,6 +5,7 @@ import java.util.Random;
 public class Main {
 
   public static void main(String[] args) {
-    System.out.println(Maze.generate(new Random()));
+    Maze maze = new Maze(7, 7, new Random());
+    System.out.println(maze);
   }
 }

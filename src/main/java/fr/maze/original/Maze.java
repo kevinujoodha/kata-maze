@@ -1,17 +1,27 @@
 package fr.maze.original;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Maze {
+    private final int rows;
+    private final int columns;
+    private final Random random;
+    private Cell[][] grid;
 
-    public static String generate(Random r) {
-        int rows = 7;
-        int columns = 7;
-        Cell[][] grid = new Cell[rows][columns];
+    public Maze(int rows, int columns, Random random) {
+        this.rows = rows;
+        this.columns = columns;
+        this.random = random;
+        initGrid();
+        generateMaze();
+    }
 
-        //initialize the maze
+    private void initGrid() {
+        grid = new Cell[rows][columns];
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
                 grid[row][column] = new Cell(row, column);
@@ -23,66 +33,45 @@ public class Maze {
                 int row = cell.getRow();
                 int column = cell.getColumn();
 
-                cell.setNorth(getGridCell(row - 1, column, grid, rows, columns));
-                cell.setSouth(getGridCell(row + 1, column, grid, rows, columns));
-                cell.setWest(getGridCell(row, column - 1, grid, rows, columns));
-                cell.setEast(getGridCell(row, column + 1, grid, rows, columns));
+                cell.setNorth(getGridCell(row - 1, column));
+                cell.setSouth(getGridCell(row + 1, column));
+                cell.setWest(getGridCell(row, column - 1));
+                cell.setEast(getGridCell(row, column + 1));
             }
         }
+    }
 
-        //compute the maze : BinaryTree algorithm used here
+    private void generateMaze() {
         for (Cell[] gridRow : grid) {
             for (Cell cell : gridRow) {
-                List<Cell> neighbors = new ArrayList<Cell>();
-                if (cell.getNorth() != null) {
-                    neighbors.add(cell.getNorth());
-                }
-                if (cell.getEast() != null) {
-                    neighbors.add(cell.getEast());
-                }
-
-                Cell neighborCell = null;
-                if (neighbors.size() > 0) {
-                    int randomIndex = r.ints(1, 0, neighbors.size()).findFirst().getAsInt();
-                    neighborCell = neighbors.get(randomIndex);
-                }
-
-                if (neighborCell != null) {
-                    cell.getNeighbors().put(neighborCell, true);
-                    neighborCell.getNeighbors().put(cell, true);
+                List<Cell> neighbors = Stream.of(cell.getNorth(), cell.getEast()).filter(Objects::nonNull).collect(Collectors.toList());
+                if (!neighbors.isEmpty()) {
+                    int randomIndex = random.ints(1, 0, neighbors.size()).findFirst().orElse(0);
+                    Cell neighborCell = neighbors.get(randomIndex);
+                    if (neighborCell != null) {
+                        cell.addNeighbors(neighborCell);
+                        neighborCell.addNeighbors(cell);
+                    }
                 }
             }
         }
+    }
 
-        //Display the maze
-        StringBuffer sb = new StringBuffer();
-
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
         sb.append("+");
-        for (int colCount = 0; colCount < columns; colCount++) {
+        for (int i = 0; i < columns; i++) {
             sb.append("---+");
         }
         sb.append("\n");
 
         for (Cell[] row : grid) {
-            StringBuffer top = new StringBuffer();
-            top.append("|");
-            StringBuffer bottom = new StringBuffer();
-            bottom.append("+");
+            StringBuilder top = new StringBuilder("|");
+            StringBuilder bottom = new StringBuilder("+");
 
             for (Cell cell : row) {
-                cell = (cell == null ? new Cell(-1, -1) : cell);
-
-                boolean islinked = (cell.getNeighbors().get(cell.getEast()) != null ?
-                        cell.getNeighbors().get(cell.getEast()).booleanValue() : false);
-
-                String eastBoundary = (islinked ? " " : "|");
-                top.append("   ").append(eastBoundary);
-
-                islinked = (cell.getNeighbors().get(cell.getSouth()) != null ?
-                        cell.getNeighbors().get(cell.getSouth()).booleanValue() : false);
-
-                String southBoundary = (islinked ? "   " : "---");
-                bottom.append(southBoundary).append("+");
+                top.append("   ").append(cell.isNeighbor(cell.getEast()) ? " " : "|");
+                bottom.append(cell.isNeighbor(cell.getSouth()) ? "   " : "---").append("+");
             }
 
             sb.append(top).append("\n");
@@ -91,12 +80,7 @@ public class Maze {
         return sb.toString();
     }
 
-    private static Cell getGridCell(int row, int column, Cell[][] grid, int rows, int columns) {
-        Cell resultCell = null;
-        if ((row >= 0 && row < rows) &&
-                (column >= 0 && (column < columns))) {
-            resultCell = grid[row][column];
-        }
-        return resultCell;
+    private Cell getGridCell(int row, int column) {
+        return (row >= 0 && row < rows) && (column >= 0 && (column < columns)) ? grid[row][column] : null;
     }
 }

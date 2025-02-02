@@ -125,6 +125,6 @@ public class ParameterizedMazeTest {
         when(randomMock.ints(1, 0, 2))
                 .thenReturn(IntStream.of(randomIndexes.get(0)), randomIndexes.stream().skip(1).map(IntStream::of).toArray(IntStream[]::new));
 
-        assertThat(Maze.generate(randomMock)).isEqualTo(expectedMaze);
+        assertThat((new Maze(7, 7, randomMock)).toString()).isEqualTo(expectedMaze);
     }
 }

@@ -1,62 +1,64 @@
 package fr.maze.original;
 
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Cell {
-  private int row, column;
-  private HashMap<Cell, Boolean> neighbors = new HashMap<Cell, Boolean>();
-  private Cell north, south, east, west;
+    private final int row;
+    private final int column;
+    private final Set<Cell> neighbors = new HashSet<>();
+    private Cell north, south, east, west;
 
-  public Cell(int row, int column) {
-    this.row = row;
-    this.column = column;
-  }
+    public Cell(int row, int column) {
+        this.row = row;
+        this.column = column;
+    }
 
-  public int getRow() {
-    return row;
-  }
+    public void addNeighbors(Cell cell) {
+        neighbors.add(cell);
+    }
 
-  public int getColumn() {
-    return column;
-  }
+    public boolean isNeighbor(Cell cell) {
+        return neighbors.contains(cell);
+    }
 
-  public HashMap<Cell, Boolean> getNeighbors() {
-    return neighbors;
-  }
+    public int getRow() {
+        return row;
+    }
 
-  public void setNeighbors(HashMap<Cell, Boolean> neighbors) {
-    this.neighbors = neighbors;
-  }
+    public int getColumn() {
+        return column;
+    }
 
-  public Cell getNorth() {
-    return north;
-  }
+    public Cell getNorth() {
+        return north;
+    }
 
-  public void setNorth(Cell north) {
-    this.north = north;
-  }
+    public void setNorth(Cell north) {
+        this.north = north;
+    }
 
-  public Cell getSouth() {
-    return south;
-  }
+    public Cell getSouth() {
+        return south;
+    }
 
-  public void setSouth(Cell south) {
-    this.south = south;
-  }
+    public void setSouth(Cell south) {
+        this.south = south;
+    }
 
-  public Cell getEast() {
-    return east;
-  }
+    public Cell getEast() {
+        return east;
+    }
 
-  public void setEast(Cell east) {
-    this.east = east;
-  }
+    public void setEast(Cell east) {
+        this.east = east;
+    }
 
-  public Cell getWest() {
-    return west;
-  }
+    public Cell getWest() {
+        return west;
+    }
 
-  public void setWest(Cell west) {
-    this.west = west;
-  }
+    public void setWest(Cell west) {
+        this.west = west;
+    }
 }
